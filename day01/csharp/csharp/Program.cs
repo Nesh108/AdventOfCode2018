@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 
 /*! Day1
-*   http://adventofcode.com/2018/day/2
+*   http://adventofcode.com/2018/day/1
 */
 
 namespace day01
