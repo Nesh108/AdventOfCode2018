@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
+/*! Day1
+*   http://adventofcode.com/2018/day/2
+*/
+
 namespace day01
 {
     class Program
