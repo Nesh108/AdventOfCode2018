@@ -70,7 +70,7 @@ namespace day02
 
         static bool IsDifferentByCharAmount(string a, string b, int amount)
         {
-            int char_difference = 0;
+            int charDifference = 0;
             if (a.Length != b.Length)
             {
                 return false;
@@ -80,14 +80,14 @@ namespace day02
             {
                 if (a[i] != b[i])
                 {
-                    char_difference++;
-                    if (char_difference > amount)
+                    charDifference++;
+                    if (charDifference > amount)
                     {
                         return false;
                     }
                 }
             }
-            return char_difference == amount;
+            return charDifference == amount;
         }
 
         static string Solve2b(string[] input)
