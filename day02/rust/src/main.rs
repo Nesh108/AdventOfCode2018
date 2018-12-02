@@ -19,14 +19,8 @@ pub fn main() {
     );
 }
 
-fn parse_input(input: &str) -> Result<Vec<i32>> {
-    input
-        .trim()
-        .lines()
-        .map(|line| {
-            let num = line.trim().parse::<i32>()?;
-            Ok(num)
-        }).collect()
+fn parse_input(input: &str) -> Result<Vec<&str>> {
+    input.trim().lines().map(|line| Ok(line.trim())).collect()
 }
 
 #[cfg(test)]
@@ -34,8 +28,20 @@ mod tests {
     use super::*;
 
     #[test]
-    fn day02a() {}
+    fn day02a() {
+        let ans = day02::solve2a(
+            parse_input("abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab")
+                .expect("Error Parsing Input"),
+        );
+        assert_eq!(ans, 12, "Expected 12 for solve2a");
+    }
 
     #[test]
-    fn day02b() {}
+    fn day02b() {
+        let ans = day02::solve2b(
+            parse_input("abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz")
+                .expect("Error Parsing Input"),
+        );
+        assert_eq!(ans, "fgij", "Expected 'fgij' for solve2b");
+    }
 }
