@@ -47,12 +47,13 @@ namespace day02
                 {
                     if (!foundTwoTimes || !foundThreeTimes)
                     {
-                        if (!foundTwoTimes && Regex.Matches(s, c.ToString()).Count == 2)
+                        int countTimes = Regex.Matches(s, c.ToString()).Count;
+                        if (!foundTwoTimes && countTimes == 2)
                         {
                             foundTwoCounter++;
                             foundTwoTimes = true;
                         }
-                        if (!foundThreeTimes && Regex.Matches(s, c.ToString()).Count == 3)
+                        if (!foundThreeTimes && countTimes == 3)
                         {
                             foundThreeCounter++;
                             foundThreeTimes = true;
