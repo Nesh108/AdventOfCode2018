@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 
@@ -13,51 +16,71 @@ namespace day03
     {
         static void Main(string[] args)
         {
-            RunTests();
-
-            string[] inputVals = ParseInputAsString("../../../../input.txt", '\n');
-            Console.WriteLine("Solution 3a: {0}", Solve3a(inputVals));
-            Console.WriteLine("Solution 3b: {0}", Solve3b(inputVals));
+            bool[] overlappedIDs = null;
+            Console.WriteLine("Solution 3a: {0}", Solve3a("../../../../input.txt", '\n', ref overlappedIDs));
+            Console.WriteLine("Solution 3b: {0}", Solve3b(overlappedIDs));
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
         }
 
-        static void RunTests()
-        {
-            Debug.Assert(Solve3a(new string[] { }) == 12, "Solve2a is Wrong!");
-            Debug.Assert(Solve3b(new string[] { }) == "", "Solve2b is Wrong!");
-        }
-
-
-        static int[] ParseInput(string path, char splitBy)
+        static int Solve3a(string path, char splitBy, ref bool[] overlappedIDs)
         {
             string[] input = File.ReadAllText(path).Split(splitBy);
-            int[] inputVals = new int[input.Length];
+
+            overlappedIDs = new bool[input.Length];
+            int count = 0;
+            Dictionary<Point, int> fabricArea = new Dictionary<Point, int>();
+            Dictionary<Point, bool> fabricCounted = new Dictionary<Point, bool>();
+            
             for (int i = 0; i < input.Length; i++)
             {
-                inputVals[i] = int.Parse(input[i]);
+                string[] v = input[i].Split(' ');
+                Rectangle r = new Rectangle(
+                    new Point(int.Parse(v[2].Split(':')[0].Split(',')[0]), int.Parse(v[2].Split(':')[0].Split(',')[1])),
+                    new Size(int.Parse(v[3].Split('x')[0]), int.Parse(v[3].Split('x')[1]))
+                );
+
+                for (int x = r.Location.X; x < r.Width + r.Location.X; x++)
+                {
+                    for (int y = r.Location.Y; y < r.Height + r.Location.Y; y++)
+                    {
+                        Point pixel = new Point(x, y);
+                        if (!fabricCounted.ContainsKey(pixel))
+                        {
+                            if (fabricArea.ContainsKey(pixel))
+                            {
+                                count++;
+                                fabricCounted.Add(pixel, true);
+                                overlappedIDs[i] = true;
+                                overlappedIDs[fabricArea[pixel]] = true;
+                            }
+                            else
+                            {
+                                fabricArea.Add(pixel, i);
+                            }
+                        }
+                        else
+                        {
+                            overlappedIDs[i] = true;
+                            overlappedIDs[fabricArea[pixel]] = true;
+                        }
+                    }
+                }
             }
-            return inputVals;
+            return count;
         }
 
-        static string[] ParseInputAsString(string path, char splitBy)
+        static int Solve3b(bool[] overlappedIDs)
         {
-            return File.ReadAllText(path).Split(splitBy);
-        }
-
-        static string[] ParseInputPerChar(string path)
-        {
-            return File.ReadAllText(path).ToCharArray().Select(c => c.ToString()).ToArray(); ;
-        }
-
-        static int Solve3a(string[] input)
-        {
-            return 0;
-        }
-        static string Solve3b(string[] input)
-        {
-            return "";
+            for (int i = 0; i < overlappedIDs.Length; i++)
+            {
+                if (!overlappedIDs[i])
+                {
+                    return i + 1;
+                }
+            }
+            return -1;
         }
     }
 }
